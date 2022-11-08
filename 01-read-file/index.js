@@ -2,9 +2,8 @@ const path = require('path');
 const link = path.join(__dirname, 'text.txt');
 const fs = require('fs');
 
-try {
-  const data = fs.readFileSync(link, 'utf-8');
-  console.log(data);
-} catch (err) {
-  console.error(err);
-}
+const readStream = fs.createReadStream( link, 'utf-8');
+let data = '';
+readStream.on('data', chunk => data += chunk);
+readStream.on('end', () => console.log(data));
+readStream.on('error', err => console.log(err.message));
